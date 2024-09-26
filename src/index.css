@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.form-control {
+  @apply border border-gray-300 text-gray-900 text-sm rounded-lg outline-none focus:border-blue-500 block w-full p-2.5;
+}
+
+.form-label {
+  @apply block mb-2 text-sm font-medium text-gray-700;
+}
+
+.btn-primary {
+  @apply bg-blue-700 text-white px-5 py-2.5 text-center text-sm rounded-lg font-medium hover:bg-blue-800 focus:ring-4 focus:ring-blue-300;
+}
+
+.btn-warning {
+  @apply bg-orange-700 text-white px-5 py-2.5 text-center text-sm rounded-lg font-medium hover:bg-orange-800 focus:ring-4 focus:ring-orange-300;
+}
+
+.btn-danger {
+  @apply bg-red-700 text-white px-5 py-2.5 text-center text-sm rounded-lg font-medium hover:bg-red-800 focus:ring-4 focus:ring-red-300;
+}
+
+.ck-editor__editable {
+  min-height: 100px;
+  resize: vertical;
+}
