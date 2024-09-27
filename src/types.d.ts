@@ -52,6 +52,9 @@ interface IBlogForm {
 //   'userId'
 // >;
 
+interface IBlogCategoryResponse {
+  data: IBlogCategory[];
+}
 interface IBlogs { //for api
   error: string;
   data: IBlog[];

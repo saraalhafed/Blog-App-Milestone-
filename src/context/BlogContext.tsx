@@ -27,7 +27,7 @@ interface IBlogContext {
     navigate: (path: string) => void,
     id: string
   ) => Promise<void>;
-  currentBlog: IBlog | null;
+  currentBlog: ISingleBlog| null;
   blogs: IBlog[];
   categories: IBlogCategory[];
   getCategories: () => Promise<void>;
@@ -70,8 +70,11 @@ export const BlogProvider = ({ children }: { children: ReactNode }) => {
     totalPages: 0,
   });
 
+
+  // this part is for pagination
+  // when we click any page in the pagination we need to get the blogs with that page
   useEffect(() => {
-    if (page) {
+    if (page) { //if page 
       getBlogs(page);
     }
   }, [page]);
@@ -148,6 +151,7 @@ export const BlogProvider = ({ children }: { children: ReactNode }) => {
           Authorization: `Token ${token}`,
         },
       });
+      //
       toast.success('Post created successfully!');
       navigate('/');
     } catch (error) {
@@ -162,11 +166,11 @@ export const BlogProvider = ({ children }: { children: ReactNode }) => {
 
   // Add a comment to a post
   const addComment = async (id: string, comment: string) => {
-    const token = JSON.parse(localStorage.getItem('user') || '{}').token;
+    const { token } = JSON.parse(localStorage.getItem('user') || '{}');
     try {
       await axios.post(
         `${baseUrl}/comments/`,
-        { blogId: id, comment },
+        { blogId: id, comment },//send comment for spesifec blog
         {
           headers: {
             Authorization: `Token ${token}`,
@@ -224,7 +228,7 @@ export const BlogProvider = ({ children }: { children: ReactNode }) => {
           },
         }
       );
-      getBlog(id); // Refresh the posts list
+      getBlog(id); // Refresh the posts list,update this blog 
     } catch (error) {
       console.log(error);
       if (axios.isAxiosError(error)) {
@@ -263,7 +267,7 @@ export const BlogProvider = ({ children }: { children: ReactNode }) => {
 
   const getCategories = async () => {
     try {
-      const { data } = await axios.get(`${baseUrl}/categories/`);
+      const { data } = await axios.get<IBlogCategoryResponse>(`${baseUrl}/categories/`);
       setCategories(data.data);
     } catch (error) {
       console.log(error);

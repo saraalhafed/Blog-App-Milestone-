@@ -8,13 +8,13 @@ export default function Home() {
   const { blogs, getBlogs, getCategories } = useBlog();
 
   useEffect(() => {
-    getBlogs();
+    getBlogs(); //to ssee the latest update for all the blogs []
     getCategories();
   }, []);
 
   return (
     <Layout>
-      {blogs.length === 0 && (
+      {blogs.length === 0 && ( //if ther is no posts
         <div className="flex justify-center items-center">
           <p>No Posts , Add one</p>
         </div>

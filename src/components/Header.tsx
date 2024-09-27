@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-
+/* import HamburgerClose from './HamburgerClose';
+import HamburgerOpen from './HamburgerOpen'; */
 export default function Header() {
   //i create somthing in userinfo,i need accesthem from context
   const { userInfo, logout } = useAuth();
@@ -16,11 +17,16 @@ export default function Header() {
         </Link>
 
         {/* Hamburger button */}
-        <button
+        <button  //taiwind btn
           className="sm:hidden p-2 text-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
-          onClick={() => setIsOpen(!isOpen)}// 
+          onClick={() => setIsOpen(!isOpen)}// to open or close the btn
           aria-label="Toggle menu"
         >
+
+
+
+{/* {isOpen ? <HamburgerOpen /> : <HamburgerClose />} */}
+
           {isOpen ? (
             <svg
               className="w-6 h-6"

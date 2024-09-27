@@ -98,3 +98,4 @@ export default function Register() {
     </section>
   );
 }
+//it should be in each form page own handelsubmit and own initial vlues and sechmavalidations

@@ -112,8 +112,9 @@ export const AuthProvider = ({ children }: IAuthProviderProps) => {
       //after the response i make destructuring
       const user = {
         token: data.token,
-        ...data.data,//i take the obj data :{} with everything inside it
+        ...data.user,//i take the obj data :{} with everything inside it
       };
+      console.log('user in context', user);//to chek user ,i make logout than login to see that
       //after the destructuring the response i update my state
       setUserInfo(user);
       localStorage.setItem('user', JSON.stringify(user));

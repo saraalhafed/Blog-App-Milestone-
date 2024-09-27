@@ -20,7 +20,7 @@ const ProfileComponent = () => {
   //   }
   // }
 
-  const { userInfo: user } = useAuth();
+  const { userInfo: user , updateUser  } = useAuth();
 
   // Provide fallback values in case user is null
   const initialValuesProfile = {
@@ -29,7 +29,7 @@ const ProfileComponent = () => {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
   };
-  const { updateUser } = useAuth();
+ 
 
   // validation
   const profileSchema = object().shape({
@@ -53,26 +53,10 @@ const ProfileComponent = () => {
       handleSubmit={handleSubmitProfile}
       title="Profile"
       inputs={[
-        {
-          name: 'username',
-          label: 'Username',
-          inputType: 'text',
-        },
-        {
-          name: 'email',
-          label: 'Email',
-          inputType: 'email',
-        },
-        {
-          name: 'firstName',
-          label: 'First Name',
-          inputType: 'text',
-        },
-        {
-          name: 'lastName',
-          label: 'Last Name',
-          inputType: 'text',
-        },
+        { name: 'username', label: 'Username', inputType: 'text' },
+        { name: 'email', label: 'Email', inputType: 'email' },
+        { name: 'firstName', label: 'First Name', inputType: 'text' },
+        { name: 'lastName', label: 'Last Name', inputType: 'text' },
       ]}
       buttonText="Update Profile"
     />

@@ -10,13 +10,13 @@ export default function Details() {
   const { getBlog, currentBlog } = useBlog();
 
   useEffect(() => {
-    if (id) getBlog(id);
-  }, []);
+    if (id) getBlog(id);//if ther is id i render this blog
+  }, [id]); //when load 
 
   return (
     <Layout>
       <div className="container max-w-5xl mx-auto">
-        {currentBlog && <Card blog={currentBlog} preview={false} />}
+        {currentBlog && <Card blog={currentBlog} preview={false} />}{/* //detail mode */}
       </div>
     </Layout>
   );

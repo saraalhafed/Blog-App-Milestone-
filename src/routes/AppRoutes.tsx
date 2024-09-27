@@ -8,7 +8,7 @@ import {
   Register,
 } from '../pages';
 import PrivateRouter from './PrivateRoute';
-import Layout from '../components/Layout';
+//import Layout from '../components/Layout';
 
 const AppRoutes = () => {
   return (

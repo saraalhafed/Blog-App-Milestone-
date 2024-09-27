@@ -7,18 +7,38 @@ import { useAuth } from '../context/AuthContext';
 import { useBlog } from '../context/BlogContext';
 
 interface CardProps {
-  blog: ISingleBlog;
+  blog: ISingleBlog |IBlog;
   preview?: boolean;
 }
-
+// way to send this blog as props ,because we can use context ,another way to send the blog we can use location from router  but here we dont have this all this info in card so we cant use it here because her api send not all the info for detail page
 export default function Card({ blog, preview }: CardProps) {
-  const [enteredComment, setEnteredComment] = useState('');
+//dommy data not real
+// blog = {
+  //   ...blog,
+  //   image:
+  //     'https://mlect5lsyspg.i.optimole.com/cb:5Q6h.2bbe3/w:620/h:300/q:mauto/f:best/https://ddsmatch.com/wp-content/uploads/2021/03/post-image.jpg',
+  //   title: 'Blog Title',
+  //   content: 'Blog Content',
+  //   _id: '1',
+  //   createdAt: '2024-01-01',
+  //   countOfVisitors: 5,
+  //   likes: [],
+  //   comments: [],
+  // };
+
+  const [enteredComment, setEnteredComment] = useState('');//for input comment
   const navigate = useNavigate();
   const { deleteBlog, addComment, addLike } = useBlog();
-  const { userInfo } = useAuth();
+  const { userInfo } = useAuth();//get the  all user info
 
-  const isOwner = blog?.userId?._id === userInfo?._id;
-  const isLiked = blog?.likes?.includes(userInfo?._id as string);
+  const isOwner = (blog as ISingleBlog)?._id === userInfo?._id;//to check if this user is the owner for this blog,in this case i see delet ,edit btn 
+  const isLiked =(blog as ISingleBlog).likes?.includes(userInfo?._id as string);
+  //like is array includ all the id for user wich make like for this blog
+
+  console.log(blog);
+// console.log(userInfo);
+
+  console.log('isOwner', isOwner, 'isLiked', isLiked);
 
   const handleDelete = (id: string) => {
     deleteBlog(id, navigate);
@@ -29,13 +49,14 @@ export default function Card({ blog, preview }: CardProps) {
   };
 
   const handleComment = (id: string) => {
-    if (enteredComment.trim().length == 0)
-      return toast.error('Please add the comment');
-    addComment(id, enteredComment);
+    if (enteredComment.trim().length == 0) //if no comment
+      return toast.error('Please add the comment');//trim string method remove empty spaces from start and end
+    addComment(id, enteredComment);//else ther is comment we call the func to add this comment
     setEnteredComment('');
   };
 
   return (
+    //to render html content <p></p>
     <div className="border border-gray-200 shadow rounded-lg">
       {/* //* image */}
       <Link to={`/blog/details/${blog?._id}`}>
@@ -53,10 +74,11 @@ export default function Card({ blog, preview }: CardProps) {
             <p className="font-bold">Published On:</p>
             <p className="italic">{new Date(blog?.createdAt).toDateString()}</p>
           </div>
-          {blog?.userId?.username && (
+          {/* render nameuser */}
+          {(blog as ISingleBlog)?.userId?.username && (//acording to the response of api,in home api not send us usernam just date in the carde but in detail page we recive from api a usernam,we can render it in the card in detailpage
             <div className="flex justify-between">
               <p className="font-bold">Author:</p>
-              <p className="italic">{blog.userId.username}</p>
+              <p className="italic">{(blog as ISingleBlog).userId.username}</p>
             </div>
           )}
         </div>
@@ -65,13 +87,14 @@ export default function Card({ blog, preview }: CardProps) {
         {/* //* blog content */}
         <div
           className={
-            preview
+            preview // 2 perwiew (i render all the carde)or to (i render single be card )
               ? 'line-clamp-1 truncate whitespace-pre-wrap my-3 flex-1'
               : ''
           }
-          dangerouslySetInnerHTML={{ __html: blog?.content }}
+          dangerouslySetInnerHTML={{ __html: blog?.content }}//to remove <p>content</p>
         >
           {/* {blog?.content} */}
+           {/* our blog.content contains html tags in it. such as <p></p>. And I dont want to render them. In that case I need to update the inner html of this div */}
         </div>
 
         <hr />
@@ -93,7 +116,9 @@ export default function Card({ blog, preview }: CardProps) {
               <button
                 className="btn-warning"
                 onClick={() =>
-                  navigate(`/blog/edit/${blog?._id}`, { state: blog })
+                  navigate(`/blog/edit/${blog?._id}`, { state: blog })//send this blog to editpage  and recive that ther with uselocation
+               // alternatively you can have a state in your context to track whether you are editing or not
+                  // setIsEditMode(!isEditMode) in the context
                 }
               >
                 EDIT
@@ -106,7 +131,7 @@ export default function Card({ blog, preview }: CardProps) {
             <div className="relative">
               <BiSolidLike
                 className={`text-2xl ${
-                  isLiked ? 'text-blue-800' : 'text-blue-500'
+                  isLiked ? 'text-blue-800' : 'text-blue-500' // if the owner make like the like darker than another like
                 } relative cursor-pointer`}
                 onClick={() => {
                   handleLike(blog?._id);
@@ -135,14 +160,14 @@ export default function Card({ blog, preview }: CardProps) {
         {/* //* Comments Section */}
         {!preview && blog?.comments.length !== 0 && (
           <>
-            {blog?.comments.map((comment, index) => (
+            {(blog as ISingleBlog)?.comments.map((comment, index) => (
               <div
                 key={index}
                 className="flex justify-between items-center my-10"
               >
                 <div className="flex space-x-5">
                   <p>{comment?.userId?.username}</p>
-                  <p className="font-italic"> {comment?.comment}</p>
+                  <p className="font-italic"> {comment?.comment}</p>{/* the content */}
                 </div>
                 <p>
                   {comment?.createdAt &&
@@ -159,12 +184,12 @@ export default function Card({ blog, preview }: CardProps) {
 
         {/* //* Add Comment Section */}
 
-        {!preview && (
+        {!preview && ( // we dont render all the card ,just one card
           <div className="flex space-x-2">
             <input
               type="text"
               className="form-control"
-              value={enteredComment}
+              value={enteredComment}//to make input controled state and handleevevnt
               onChange={(e) => setEnteredComment(e.target.value)}
             />
             <button
